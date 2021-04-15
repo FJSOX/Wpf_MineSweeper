@@ -1,0 +1,29 @@
+﻿<Window x:Class="Wpf_MineSweeper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpf_MineSweeper"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="300" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="17" Margin="4">地图大小：</Label>
+        <ComboBox x:Name="CB_MapSize" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="17" Margin="4" Width="100"
+                  SelectedItem="{Binding ShowItem}" SelectedIndex="{Binding SelectItem}"></ComboBox>
+        <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="17" Margin="4">难度（地雷数）：</Label>
+        <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="17" Margin="4" MinWidth="60" >0</TextBox>
+        <Button Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Width="80" x:Name="BTN_OK"
+                VerticalAlignment="Center" FontSize="15" Margin="4" Grid.ColumnSpan="2" Click="BTN_OK_Click">确认</Button>
+    </Grid>
+</Window>
