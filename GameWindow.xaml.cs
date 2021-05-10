@@ -20,20 +20,22 @@ namespace Wpf_MineSweeper
     public partial class GameWindow : Window
     {
         //定义区
-        public static int widthOfWP;
+        public static int widthOfWP;//
         //public static int heightOfWP;
         //public static int widthOfGameWindow;
         //public static int heightOfGameWindow;
-        public static int rowNumberOfLandmine;
-        public static int numberOfLandmine;
+        public static int rowNumberOfLandmine;//行数
+        public static int numberOfLandmine;//地雷数
 
         public Random randomLandmine;
-        public List<int> listLandmine;
-        public List<int> digged;
+        public List<int> listLandmine;//地雷列表
+        public List<int> digged;//已挖开土块列表
 
         public GameWindow()
         {
             InitializeComponent();
         }
+
+        
     }
 }

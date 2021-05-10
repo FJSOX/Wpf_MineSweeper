@@ -7,8 +7,10 @@
         mc:Ignorable="d"
         Title="GameWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
     <Grid  HorizontalAlignment="Center" VerticalAlignment="Center">
-        <WrapPanel x:Name="WP" HorizontalAlignment="Center" VerticalAlignment="Center">
-            
-        </WrapPanel>
+        <Border BorderThickness="1" BorderBrush="Black">
+            <WrapPanel x:Name="WP" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
+
+            </WrapPanel>
+        </Border>
     </Grid>
 </Window>
