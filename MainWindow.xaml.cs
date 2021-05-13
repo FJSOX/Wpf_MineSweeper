@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace Wpf_MineSweeper
 {
@@ -24,6 +25,14 @@ namespace Wpf_MineSweeper
         //地雷list
         int MS_row;
         int NumberOfLandmine;//地雷数
+        bool isGameOver_flag=false;
+        int flagCount=0;
+        ImageBrush imageFlag = new ImageBrush();
+        ImageBrush imageUnknow = new ImageBrush();
+
+
+
+        GameWindow gameWindow;
 
         //调试变量
         List<NormalButton> NBS=new List<NormalButton>();
@@ -56,6 +65,9 @@ namespace Wpf_MineSweeper
             CB_MapSize.ItemsSource = cBItems;
             CB_MapSize.DisplayMemberPath = "ShowItem";
             CB_MapSize.SelectedValuePath = "SelectItem";
+
+            imageFlag.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/flag.bmp", UriKind.Absolute));
+            imageUnknow.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/unknow.bmp", UriKind.Absolute));
         }
 
         /// <summary>
@@ -83,7 +95,7 @@ namespace Wpf_MineSweeper
 
             //new GameWindow
             GameWindow.rowNumberOfLandmine = ((CBItem)CB_MapSize.SelectedItem).SelectItem;
-            GameWindow gameWindow = new GameWindow();
+            gameWindow = new GameWindow();
 
             //随机地雷表
             Random random1 = new Random();
@@ -171,11 +183,39 @@ namespace Wpf_MineSweeper
         }
 
         /// <summary>
+        /// 游戏结束时调用此函数，使地图界面不可用；
+        /// </summary>
+        void GameOver()
+        {
+            VisualBrush vb = new VisualBrush(gameWindow.GD);
+            Rectangle rectangle = new Rectangle();
+            rectangle.Width = gameWindow.GD.ActualWidth;
+            rectangle.Height = gameWindow.GD.ActualHeight;
+            rectangle.Opacity = 0.75;
+            rectangle.Fill = vb;
+            gameWindow.Content = null;
+
+            Grid grid = new Grid();
+            grid.Background = Brushes.DarkGray;
+            grid.Children.Add(rectangle);
+            gameWindow.Content = grid;
+
+            return;
+        }
+
+        /// <summary>
         /// NormalButton的Click响应，本质是一个委托
         /// </summary>
         /// <param name="listid"></param>
         public void NormalClick(int listid)
         {
+            //if (isGameOver_flag)
+            //{
+            //    GameOver();
+
+            //    return;
+            //}
+
             //rightClickCount是否已标记
             if (NBS[listid].rightClickCount!=0)
             {
@@ -195,11 +235,30 @@ namespace Wpf_MineSweeper
                 //NBS[listid].isdigged_flag = true;
                 foreach(var i in Landmines)
                 {
-                    NBS[i].Background = Brushes.DarkRed;
+                    ImageBrush imageBrush = new ImageBrush();
+                    imageBrush.ImageSource =new BitmapImage(new Uri("pack://application:,,,/images/boom.bmp", UriKind.Absolute));
+                    NBS[i].Background=imageBrush;
                 }
 
+                //Thread.Sleep(100);
+                //isGameOver_flag = true;                
+
                 MessageBox.Show("你输了");
-                
+
+                //VisualBrush vb = new VisualBrush(gameWindow.GD);
+                //Rectangle rectangle = new Rectangle();
+                //rectangle.Width = gameWindow.GD.ActualWidth;
+                //rectangle.Height = gameWindow.GD.ActualHeight;
+                //rectangle.Opacity = 0.75;
+                //rectangle.Fill = vb;
+                //gameWindow.Content = null;
+
+                //Grid grid = new Grid();
+                //grid.Background = Brushes.DarkGray;
+                //grid.Children.Add(rectangle);
+                //gameWindow.Content = grid;
+                GameOver();//必须放在1messagebox后面，原因未知
+
                 //中止游戏
                 return;
             }
@@ -289,19 +348,50 @@ namespace Wpf_MineSweeper
 
         }
 
+        void Win()
+        {
+            MessageBox.Show("你赢了");
+            GameOver();
+            return;
+        }
+
         public void NormalRightClick(int listid)
         {
-            switch(NBS[listid].rightClickCount)
+            ImageBrush imageBrush = new ImageBrush();
+            switch (NBS[listid].rightClickCount)
             {
+                
                 case 0:
-                    NBS[listid].Content = "";
+                    NBS[listid].Background=Brushes.DarkGray;
                     return;
                     //break;
                 case 1:
-                    NBS[listid].Content = "P";
+                    
+                    //imageBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/flag.bmp", UriKind.Absolute));
+                    NBS[listid].Background = imageFlag;
+                    flagCount++;
+                    if (flagCount == Landmines.Count)
+                    {
+                        int cnt = 0;
+                        foreach (var i in Landmines)
+                        {
+                            if (NBS[i].rightClickCount!=1)
+                            {
+                                break;
+                            }
+                            cnt++;
+                        }
+                        if (cnt==Landmines.Count)
+                        {
+                            Win();
+                        }
+                    }
                     break;
                 case 2:
-                    NBS[listid].Content = "?";
+                    //ImageBrush imageBrush = new ImageBrush();
+                    //imageBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/unknow.bmp", UriKind.Absolute));
+                    NBS[listid].Background = imageUnknow;
+                    flagCount--;
                     break;
             }
         }
@@ -320,6 +410,7 @@ namespace Wpf_MineSweeper
         public ClickHandle clickhandle;//click委托
         public ClickHandle rightClickHandle;//右击委托
         public int rightClickCount=0;//右击计数器
+        //public bool isGameOver_flag;//
 
         protected override void OnClick()
         {

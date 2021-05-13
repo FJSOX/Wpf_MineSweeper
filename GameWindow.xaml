@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Wpf_MineSweeper"
         mc:Ignorable="d"
         Title="GameWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
-    <Grid  HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid x:Name="GD"  HorizontalAlignment="Center" VerticalAlignment="Center">
         <Border BorderThickness="1" BorderBrush="Black">
             <WrapPanel x:Name="WP" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
 

@@ -101,5 +101,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\boom.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\flag.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\unknow.bmp" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
