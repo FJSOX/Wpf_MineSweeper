@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Wpf_MineSweeper.MenuUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Wpf_MineSweeper"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" >
+    
+    <!--<StackPanel x:Name="SP" Orientation="Horizontal" Background="AliceBlue">
+        
+    </StackPanel>-->
+    <Menu x:Name="MN" Height="20">
+        <MenuItem Header="文件">
+            <MenuItem Header="返回选择界面"></MenuItem>
+            <MenuItem Header="重新开始"></MenuItem>
+            <MenuItem Header="退出游戏"></MenuItem>
+        </MenuItem>
+    </Menu>
+</UserControl>

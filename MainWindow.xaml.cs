@@ -70,23 +70,43 @@ namespace Wpf_MineSweeper
             imageUnknow.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/unknow.bmp", UriKind.Absolute));
         }
 
-        /// <summary>
-        /// 确认按钮，点击新建地图
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BTN_OK_Click(object sender, RoutedEventArgs e)
+        public void ShowMainWindow()
+        {
+            this.Show();
+            //gameWindow.Close();
+        }
+
+        public void RemakeGame()
+        {
+            gameWindow.Close();
+            NewGame();
+        }
+
+        public void QuitGame()
+        {
+            if (gameWindow.closeAll)
+            {
+                this.Close();
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                gameWindow.Close();
+            }
+        }
+
+        void NewGame()
         {
             //判空
-            if (CB_MapSize.SelectedItem==null)
+            if (CB_MapSize.SelectedItem == null)
             {
                 MessageBox.Show("请选择地图大小！");
                 return;
             }
-            if (TBX_LandmineNumber.Text==null || Convert.ToInt32(TBX_LandmineNumber.Text) == 0)
+            if (TBX_LandmineNumber.Text == null || Convert.ToInt32(TBX_LandmineNumber.Text) == 0)
             {
                 Random random = new Random();
-                NumberOfLandmine = random.Next() % (Convert.ToInt32(Math.Pow(((CBItem)CB_MapSize.SelectedItem).SelectItem, 2))-5) + 5;
+                NumberOfLandmine = random.Next() % (Convert.ToInt32(Math.Pow(((CBItem)CB_MapSize.SelectedItem).SelectItem, 2)) - 5) + 5;
             }
             else
             {
@@ -101,21 +121,25 @@ namespace Wpf_MineSweeper
             Random random1 = new Random();
             while (Landmines.Count < NumberOfLandmine)
             {
-                int site=random1.Next() % (Convert.ToInt32(Math.Pow(((CBItem)CB_MapSize.SelectedItem).SelectItem, 2) - 1));
+                int site = random1.Next() % (Convert.ToInt32(Math.Pow(((CBItem)CB_MapSize.SelectedItem).SelectItem, 2) - 1));
                 if (!Landmines.Contains(site))
                 {
                     Landmines.Add(site);
                 }
             }
-            
+
             //绘制窗体框架
-            gameWindow.WP.Width = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30+2;
-            gameWindow.WP.Height = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30+2;
-            gameWindow.Width = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30+25;
-            gameWindow.Height = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30+50;
-            for (int i = 0; i < ((CBItem)CB_MapSize.SelectedItem).SelectItem* ((CBItem)CB_MapSize.SelectedItem).SelectItem; i++)
+            gameWindow.WP.Width = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30 + 2;
+            gameWindow.WP.Height = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30 + 2;
+            gameWindow.Width = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30 + 25;
+            gameWindow.Height = ((CBItem)CB_MapSize.SelectedItem).SelectItem * 30 + 72;
+            gameWindow.gameWindowDelegate += ShowMainWindow;
+            gameWindow.gameWindowDelegate1 += RemakeGame;
+            gameWindow.gameWindowDelegate2 += QuitGame;
+            //gameWindow.MN.Width=
+            for (int i = 0; i < ((CBItem)CB_MapSize.SelectedItem).SelectItem * ((CBItem)CB_MapSize.SelectedItem).SelectItem; i++)
             {
-                NormalButton normalButton = new NormalButton() { Width = 30, Height = 30,  listid=i, Background=Brushes.DarkGray, FontWeight=FontWeights.Black};
+                NormalButton normalButton = new NormalButton() { Width = 30, Height = 30, listid = i, Background = Brushes.DarkGray, FontWeight = FontWeights.Black };
                 if (Landmines.Contains(i))
                 {
                     normalButton.islandmine_flag = true;
@@ -133,7 +157,7 @@ namespace Wpf_MineSweeper
                 if (i - ((CBItem)CB_MapSize.SelectedItem).SelectItem >= 0 //判断土块序号是否存在
                 && NBS[i - ((CBItem)CB_MapSize.SelectedItem).SelectItem].islandmine_flag == false) //判断是否为地雷
                 {
-                    NBS[i - ((CBItem)CB_MapSize.SelectedItem).SelectItem].numberoflandminesaround++;                    
+                    NBS[i - ((CBItem)CB_MapSize.SelectedItem).SelectItem].numberoflandminesaround++;
                 }
                 if (i - ((CBItem)CB_MapSize.SelectedItem).SelectItem >= 0
                     && (i - ((CBItem)CB_MapSize.SelectedItem).SelectItem + 1) % ((CBItem)CB_MapSize.SelectedItem).SelectItem != 0 //判断土块序号是否存在
@@ -145,7 +169,7 @@ namespace Wpf_MineSweeper
                 if (i + ((CBItem)CB_MapSize.SelectedItem).SelectItem < NBS.Count
                     && NBS[i + ((CBItem)CB_MapSize.SelectedItem).SelectItem].islandmine_flag == false)
                 {
-                    NBS[i + ((CBItem)CB_MapSize.SelectedItem).SelectItem].numberoflandminesaround++; 
+                    NBS[i + ((CBItem)CB_MapSize.SelectedItem).SelectItem].numberoflandminesaround++;
                 }
                 if (i + ((CBItem)CB_MapSize.SelectedItem).SelectItem < NBS.Count
                     && (i + ((CBItem)CB_MapSize.SelectedItem).SelectItem) % ((CBItem)CB_MapSize.SelectedItem).SelectItem != 0 //判断土块序号是否存在
@@ -169,7 +193,7 @@ namespace Wpf_MineSweeper
                 if ((i + 1) % ((CBItem)CB_MapSize.SelectedItem).SelectItem != 0
                    && NBS[i + 1].islandmine_flag == false)
                 {
-                    NBS[i + 1].numberoflandminesaround++;                    
+                    NBS[i + 1].numberoflandminesaround++;
                 }
                 if ((i + 1) % ((CBItem)CB_MapSize.SelectedItem).SelectItem != 0
                     && (i + 1) + ((CBItem)CB_MapSize.SelectedItem).SelectItem < NBS.Count
@@ -180,6 +204,16 @@ namespace Wpf_MineSweeper
             }
 
             this.Hide();
+        }
+
+        /// <summary>
+        /// 确认按钮，点击新建地图
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BTN_OK_Click(object sender, RoutedEventArgs e)
+        {
+            NewGame();
         }
 
         /// <summary>
@@ -348,6 +382,9 @@ namespace Wpf_MineSweeper
 
         }
 
+        /// <summary>
+        /// 游戏胜利时调用
+        /// </summary>
         void Win()
         {
             MessageBox.Show("你赢了");

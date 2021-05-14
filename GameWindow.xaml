@@ -5,12 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf_MineSweeper"
         mc:Ignorable="d"
-        Title="GameWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
+        Title="GameWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closed="Window_Closed">
     <Grid x:Name="GD"  HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Border BorderThickness="1" BorderBrush="Black">
-            <WrapPanel x:Name="WP" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
+        <StackPanel>
+            <Menu x:Name="MN" Height="20" Margin="1">
+                <MenuItem Header="文件">
+                    <MenuItem Header="返回选择界面" Click="MenuItem_Click"></MenuItem>
+                    <MenuItem Header="重新开始" Click="MenuItem_Click_1"></MenuItem>
+                    <MenuItem Header="退出游戏" Click="MenuItem_Click_2"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="帮助"/>
+            </Menu>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <WrapPanel x:Name="WP" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3">
 
-            </WrapPanel>
-        </Border>
+                </WrapPanel>    
+            </Border>
+        </StackPanel>
     </Grid>
 </Window>
